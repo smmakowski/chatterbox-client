@@ -51,12 +51,11 @@ var app = {
       contentType: 'application/json',
       // dataType: 'json',
       success: function (data) {
-        console.log(data);
         app.clearMessages();
         data.results.forEach(function(messageObj) {
           app.renderMessage(messageObj);
         });
-        console.log('chatterbox: Reply received');
+        // console.log('chatterbox: Reply received');
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
