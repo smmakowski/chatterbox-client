@@ -53,11 +53,10 @@ var app = {
       $('#message').val('');
     });
 
-    // fetch new messages
+    // fetch new messages every x seconds
     setInterval(function() {
       app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
     }, 1000);
-    // app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
   },
 
   send: function(message) { 
@@ -85,12 +84,14 @@ var app = {
       success: function (data) {
         app.clearMessages();
         data.results.forEach(function(messageObj) {
+          // generate every new message
           app.renderMessage(messageObj);
+
+          // check if any new rooms have been created since last fetch, if so. Add them to roomList
           if (!app.roomList.includes(messageObj.roomname)) {
             app.roomList.push(messageObj.roomname);
           }
         });
-        // console.log('chatterbox: Reply received');
       },
       error: function (data) {
         // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
@@ -155,8 +156,10 @@ var app = {
     return secured.join('');
   },
 
+  // how we keep track of current room for message posting
   currentRoom: 'lobby',
 
+  // list of rooms that updates as we GET data from server
   roomList: []
 
 };
