@@ -1,21 +1,29 @@
+// Set up page on load
+$(document).ready(function() {
+  console.log('Init firing.');
+  app.init();
+});
+
+
+/// App ///
+
+
 var app = {
 
   init: function() {
-    $(document).ready(function() {
 
-      $('#chats').on('click', '.username', function() {
-        app.handleUsernameClick();
-      });
+    $('#chats').on('click', '.username', function() {
+      app.handleUsernameClick();
+    });
 
-      $('#send .submit').on('submit', function(event) {
-        event.preventdefault();
-        app.handleSubmit();
-      });
+    $('#send').unbind('submit').bind('submit').submit(function(event) {
+      event.preventDefault();
+      app.handleSubmit();
     });
 
     setInterval(function() {
       app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
-    }, 1000);
+    }, 5000);
 
   },
 
@@ -77,16 +85,6 @@ var app = {
   },
 
   handleSubmit: function() {
-    // var username = ?????????; 
-    //     var text = $('.messageField').val();
-    //     var roomname = ???;
-
-    //     var messageObj = {
-    //       'username': ??,
-    //       'text': text,
-    //       'roomname': ??
-    //     }
-    //     app.send(messageObj);
   }
 
 
