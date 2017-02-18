@@ -46,10 +46,10 @@ var app = {
     });
 
     // fetch new messages
-    // setInterval(function() {
-    //   app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
-    // }, 1000);
-    app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
+    setInterval(function() {
+      app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
+    }, 1000);
+    // app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
   },
 
   send: function(message) { 
@@ -69,14 +69,11 @@ var app = {
   },  
 
   fetch: function(url) {
-    if (url) {
-      url += '?limit=1000&order=createdAt';
-    }
     $.ajax({
       url: url,
       type: 'GET',
       contentType: 'application/json',
-      // dataType: 'json',
+      data: 'order=-createdAt',
       success: function (data) {
         app.clearMessages();
         data.results.forEach(function(messageObj) {
@@ -105,7 +102,7 @@ var app = {
     var $text = $('<p></p>').text(message.text);
     $message.prepend($username).append($text);
     $message.addClass('chat');
-    $('#chats').prepend($message);
+    $('#chats').append($message);
   },
 
   renderRoom: function(roomName) {
