@@ -11,6 +11,7 @@ $(document).ready(function() {
 
 var app = {
 
+
   init: function() {
 
     // set friend on click
@@ -20,8 +21,21 @@ var app = {
 
     // set current room
     $('#roomSelect').change(function() {
-      var roomName = prompt('Name your room.');
-      app.renderRoom(roomName);
+      var $clickedRoom = $(this).val();
+      if ($clickedRoom === 'newRoom') {
+        var roomName = prompt('Name your room.');
+        app.renderRoom(roomName);
+      } else {
+        $('#chats').children().hide();
+        app.currentRoom = $clickedRoom;
+        var roomProperty = '.' + $clickedRoom;
+        $(roomProperty).show();
+      }
+    });
+
+    // clear messages with button click
+    $('#clear').on('click', function() {
+      app.clearMessages();
     });
 
     // send message event
@@ -31,10 +45,10 @@ var app = {
     });
 
     // fetch new messages
-    setInterval(function() {
-      app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
-    }, 1000);
-
+    // setInterval(function() {
+    //   app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
+    // }, 1000);
+    app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
   },
 
   send: function(message) { 
@@ -94,10 +108,9 @@ var app = {
   },
 
   renderRoom: function(roomName) {
-    console.log(roomName);
     var $room = $('<option></option>');
     $room.attr('value', roomName).text(roomName);
-    $('#roomSelect').append($room);
+    $('#roomSelect').prepend($room);
   },
 
   handleUsernameClick: function() {
@@ -107,18 +120,17 @@ var app = {
   handleSubmit: function() {
     var text = $('#message').val();
     var username = window.username;
-    var room = 'lobby';
     var message = {
       'username': username,
       'text': text,
-      'roomname': room
+      'roomname': app.currentRoom
     };
-
 
     app.renderMessage(message);
     app.send(message);
-  }
+  },
 
+  currentRoom: 'lobby'
 
 };
 
