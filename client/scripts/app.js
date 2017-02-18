@@ -1,6 +1,23 @@
 var app = {
 
-  init: function() {},
+  init: function() {
+    $(document).ready(function() {
+
+      $('#chats').on('click', '.username', function() {
+        app.handleUsernameClick();
+      });
+
+      $('#send .submit').on('submit', function(event) {
+        event.preventdefault();
+        app.handleSubmit();
+      });
+    });
+
+    setInterval(function() {
+      app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
+    }, 1000);
+
+  },
 
   send: function(message) { 
     $.ajax({
@@ -22,7 +39,7 @@ var app = {
     $.ajax({
       url: url,
       type: 'GET',
-      data: JSON.stringify(message),
+      // data: JSON.stringify(message),
       contentType: 'application/json',
       success: function (data) {
         console.log('chatterbox: Reply received');
@@ -57,31 +74,22 @@ var app = {
 
   handleUsernameClick: function() {
     $('.username').addClass('friend');
+  },
+
+  handleSubmit: function() {
+    // var username = ?????????; 
+    //     var text = $('.messageField').val();
+    //     var roomname = ???;
+
+    //     var messageObj = {
+    //       'username': ??,
+    //       'text': text,
+    //       'roomname': ??
+    //     }
+    //     app.send(messageObj);
   }
 
 
 };
-
-
-/////////// Click events /////////////
-
-
-$(document).ready(function() {
-
-  app.renderMessage({
-    username: 'Mel Brooks',
-    text: 'I didn\'t get a harumph outa that guy.!',
-    roomname: 'lobby'
-  });
-
-  $('.username').on('click', function() {
-    app.handleUsernameClick();
-  });
-
-  // $('#submit').on('click', function() {
-  //   app.handleUsernameClick();
-  // });
-
-});
 
 
