@@ -34,6 +34,13 @@ var app = {
       }
     });
 
+    // refresh rooms on roomList click
+    $('#roomSelect').click(function() {
+      app.roomList.forEach(function(roomname) {
+        app.renderRoom(roomname);
+      });
+    });
+
     // clear messages with button click
     $('#clear').on('click', function() {
       app.clearMessages();
@@ -79,6 +86,9 @@ var app = {
         app.clearMessages();
         data.results.forEach(function(messageObj) {
           app.renderMessage(messageObj);
+          if (!app.roomList.includes(messageObj.roomname)) {
+            app.roomList.push(messageObj.roomname);
+          }
         });
         // console.log('chatterbox: Reply received');
       },
@@ -145,7 +155,9 @@ var app = {
     return secured.join('');
   },
 
-  currentRoom: 'lobby'
+  currentRoom: 'lobby',
+
+  roomList: []
 
 };
 
