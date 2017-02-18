@@ -1,6 +1,7 @@
 // Set up page on load
 $(document).ready(function() {
   console.log('Init firing.');
+  window.username = window.location.search.split('=')[1];
   app.init();
 });
 
@@ -12,15 +13,24 @@ var app = {
 
   init: function() {
 
+    // set friend on click
     $('#chats').on('click', '.username', function() {
       app.handleUsernameClick();
     });
 
+    // set current room
+    $('#roomSelect').change(function() {
+      var roomName = prompt('Name your room.');
+      app.renderRoom(roomName);
+    });
+
+    // send message event
     $('#send').unbind('submit').bind('submit').submit(function(event) {
       event.preventDefault();
       app.handleSubmit();
     });
 
+    // fetch new messages
     setInterval(function() {
       app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
     }, 1000);
@@ -44,9 +54,11 @@ var app = {
   },  
 
   fetch: function(url) {
-    console.log(url);
+    if (url) {
+      url += '?limit=1000&order=createdAt';
+    }
     $.ajax({
-      url: url + '?limit=1000&order=createdAt',
+      url: url,
       type: 'GET',
       contentType: 'application/json',
       // dataType: 'json',
@@ -69,8 +81,12 @@ var app = {
   },
 
   renderMessage: function (message) {
-    var $message = $('<div></div>');
-    var $username = $('<span></span>').addClass('username').addClass(message.username).text(message.username);
+    var $message = $('<div></div>').addClass(message.roomname);
+    var $username = $('<span></span>')
+    .addClass('username')
+    .addClass(message.username)
+    .text(message.username);
+
     var $text = $('<p></p>').text(message.text);
     $message.prepend($username).append($text);
     $message.addClass('chat');
@@ -78,6 +94,7 @@ var app = {
   },
 
   renderRoom: function(roomName) {
+    console.log(roomName);
     var $room = $('<option></option>');
     $room.attr('value', roomName).text(roomName);
     $('#roomSelect').append($room);
@@ -89,7 +106,7 @@ var app = {
 
   handleSubmit: function() {
     var text = $('#message').val();
-    var username = 'test';
+    var username = window.username;
     var room = 'lobby';
     var message = {
       'username': username,
@@ -97,7 +114,6 @@ var app = {
       'roomname': room
     };
 
-    console.log(message);
 
     app.renderMessage(message);
     app.send(message);
@@ -105,5 +121,7 @@ var app = {
 
 
 };
+
+
 
 
