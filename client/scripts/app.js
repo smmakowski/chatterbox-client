@@ -17,6 +17,11 @@ var app = {
     // set friend on click
     $('#chats').on('click', '.username', function() {
       var username = '.' + $(this).attr('class').split(' ')[1];
+
+      // if we arent friends yet, make them friends
+      if (app.friends.indexOf(username) === -1) {
+        app.friends.push(username);
+      }
       app.handleUsernameClick(username);
     });
 
@@ -110,6 +115,9 @@ var app = {
     .addClass('username')
     .addClass(message.username)
     .text(app.secure(message.username));
+    if (app.friends.includes('.' + message.username)) {
+      $username.addClass('friend');
+    }
 
     var $text = $('<p></p>').text(app.secure(message.text));
     $message.prepend($username).append($text);
@@ -160,7 +168,10 @@ var app = {
   currentRoom: 'lobby',
 
   // list of rooms that updates as we GET data from server
-  roomList: []
+  roomList: [],
+
+  // stores our friends list to highlight friend names on message arrival
+  friends: [],
 
 };
 
