@@ -16,7 +16,8 @@ var app = {
 
     // set friend on click
     $('#chats').on('click', '.username', function() {
-      app.handleUsernameClick();
+      var username = '.' + $(this).attr('class').split(' ')[1];
+      app.handleUsernameClick(username);
     });
 
     // set current room
@@ -113,8 +114,8 @@ var app = {
     $('#roomSelect').prepend($room);
   },
 
-  handleUsernameClick: function() {
-    $('.username').addClass('friend');
+  handleUsernameClick: function(username) {
+    $(username).toggleClass('friend');
   },
 
   handleSubmit: function() {
