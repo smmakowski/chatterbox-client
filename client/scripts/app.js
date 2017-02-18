@@ -97,9 +97,9 @@ var app = {
     var $username = $('<span></span>')
     .addClass('username')
     .addClass(message.username)
-    .text(message.username);
+    .text(app.secure(message.username));
 
-    var $text = $('<p></p>').text(message.text);
+    var $text = $('<p></p>').text(app.secure(message.text));
     $message.prepend($username).append($text);
     $message.addClass('chat');
     $('#chats').append($message);
@@ -126,6 +126,19 @@ var app = {
 
     app.renderMessage(message);
     app.send(message);
+  },
+
+  secure: function(string) {
+    var forbidden = ['<', '>', '/', '{', '}', ';', '[', ']', '(', ')', '%', '$'];
+    var secured = string.split('');
+
+    for (var i = 0; i < secured.length; i++) {
+      if (forbidden.indexOf(secured[i]) > -1) {
+        secured[i] = ' ';
+      }
+    }
+
+    return secured.join('');
   },
 
   currentRoom: 'lobby'
