@@ -7,6 +7,7 @@
 
     <!-- dependencies -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
     <script>
       // YOU DO NOT NEED TO EDIT THIS CODE
       if (!/(&|\?)username=/.test(window.location.search)) {
@@ -26,7 +27,22 @@
     <div id="main">
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
+      <p>Room:</p> 
+      <select id ="roomSelect">
+        <option value = "lobby">Lobby</option>
+      <option value = "newRoom">New room... </option>
+      </select>
+      <form id="send">
+        <input class="messageField" type="text" placeholder="Write message here.">
+        <button class="submit">Submit</button>
+      </form>
+      <button id="clear">Clear Messages</button>
+      <!-- when we want to add stuff propenda a <option value="chatroomname">ChatroomName</option> -->
     </div>
-    <div id="chats"></div>
+    <div id="chats">
+      <!--put divs with .message class in here-->
+      <!-- each message should have a username with .username class, and message -->
+      <!-- should draw data from the ajax GET Method-->
+    </div>
   </body>
 </html>
