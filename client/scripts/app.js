@@ -23,7 +23,7 @@ var app = {
 
     setInterval(function() {
       app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
-    }, 5000);
+    }, 1000);
 
   },
 
@@ -44,12 +44,14 @@ var app = {
   },  
 
   fetch: function(url) {
+    console.log(url);
     $.ajax({
-      url: url,
+      url: url + '?limit=1000&order=createdAt',
       type: 'GET',
-      // data: JSON.stringify(message),
       contentType: 'application/json',
+      // dataType: 'json',
       success: function (data) {
+        console.log(data);
         app.clearMessages();
         data.results.forEach(function(messageObj) {
           app.renderMessage(messageObj);
@@ -74,8 +76,6 @@ var app = {
     $message.prepend($username).append($text);
     $message.addClass('chat');
     $('#chats').prepend($message);
-
-    // this.send(message);
   },
 
   renderRoom: function(roomName) {
@@ -89,6 +89,19 @@ var app = {
   },
 
   handleSubmit: function() {
+    var text = $('#message').val();
+    var username = 'test';
+    var room = 'lobby';
+    var message = {
+      'username': username,
+      'text': text,
+      'roomname': room
+    };
+
+    console.log(message);
+
+    app.renderMessage(message);
+    app.send(message);
   }
 
 
