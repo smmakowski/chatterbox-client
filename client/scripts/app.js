@@ -41,6 +41,7 @@ var app = {
 
     // refresh rooms on roomList click
     $('#roomSelect').click(function() {
+
       app.roomList.forEach(function(roomname) {
         app.renderRoom(roomname);
       });
@@ -89,8 +90,11 @@ var app = {
       success: function (data) {
         app.clearMessages();
         data.results.forEach(function(messageObj) {
-          // generate every new message
-          app.renderMessage(messageObj);
+
+          // generate every new message for current room only
+          if (app.currentRoom === messageObj.roomname) {
+            app.renderMessage(messageObj);
+          }
 
           // check if any new rooms have been created since last fetch, if so. Add them to roomList
           if (!app.roomList.includes(messageObj.roomname)) {
