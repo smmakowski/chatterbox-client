@@ -43,6 +43,7 @@ var app = {
     $('#send').unbind('submit').bind('submit').submit(function(event) {
       event.preventDefault();
       app.handleSubmit();
+      $('#message').val('');
     });
 
     // fetch new messages
@@ -127,8 +128,11 @@ var app = {
     app.renderMessage(message);
     app.send(message);
   },
-
+  
+  //Security Function
   secure: function(string) {
+    if (!string) { return ''; }
+
     var forbidden = ['<', '>', '/', '{', '}', ';', '[', ']', '(', ')', '%', '$'];
     var secured = string.split('');
 
