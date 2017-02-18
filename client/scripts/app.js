@@ -50,6 +50,10 @@ var app = {
       // data: JSON.stringify(message),
       contentType: 'application/json',
       success: function (data) {
+        app.clearMessages();
+        data.results.forEach(function(messageObj) {
+          app.renderMessage(messageObj);
+        });
         console.log('chatterbox: Reply received');
       },
       error: function (data) {
@@ -69,7 +73,7 @@ var app = {
     var $text = $('<p></p>').text(message.text);
     $message.prepend($username).append($text);
     $message.addClass('chat');
-    $('#chats').append($message);
+    $('#chats').prepend($message);
 
     // this.send(message);
   },
