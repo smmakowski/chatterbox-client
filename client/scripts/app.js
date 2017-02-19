@@ -34,7 +34,7 @@ var app = {
     $('#roomSelect').change(function() {
       // if new room is clicked, generate new room
       var $clickedRoom = $(this).val();
-      if ($clickedRoom === 'Create new Room here...') {
+      if ($clickedRoom === 'Create new Room here...') { 
         var roomName = prompt('Name your room.');
         app.renderRoom(roomName);
       } else {
