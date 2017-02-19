@@ -27,22 +27,18 @@
     <div id="main">
       <h1>chatterbox</h1>
       <!-- Your HTML goes here! -->
-      <p>Room:</p> 
+      <p>Room:</p><p class="currentRoom">lobby</p>
       <select id ="roomSelect">
         <option value = "lobby">lobby</option>
-        <option value = "newRoom">New room... </option>
+        <option value = "Create new Room here..."></option>
       </select>
       <form id="send">
         <input id="message" type="text">
         <input type="submit" value="Submit"></input>
       </form>
       <button id="clear">Clear Messages</button>
-      <!-- when we want to add stuff propenda a <option value="chatroomname">ChatroomName</option> -->
     </div>
     <div id="chats">
-      <!--put divs with .message class in here-->
-      <!-- each message should have a username with .username class, and message -->
-      <!-- should draw data from the ajax GET Method-->
     </div>
   </body>
 </html>

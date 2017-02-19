@@ -12,7 +12,10 @@ $(document).ready(function() {
 var app = {
 
 
+
   init: function() {
+
+
 
     // set friend on click
     $('#chats').on('click', '.username', function() {
@@ -25,32 +28,44 @@ var app = {
       app.handleUsernameClick(username);
     });
 
+
+
     // set current room
     $('#roomSelect').change(function() {
+      // if new room is clicked, generate new room
       var $clickedRoom = $(this).val();
-      if ($clickedRoom === 'newRoom') {
+      if ($clickedRoom === 'Create new Room here...') {
         var roomName = prompt('Name your room.');
         app.renderRoom(roomName);
       } else {
+        // otherwise filter messages by newly clicked room
         $('#chats').children().hide();
         app.currentRoom = $clickedRoom;
         var roomProperty = '.' + $clickedRoom;
         $(roomProperty).show();
+        $('.currentRoom').text(app.currentRoom);
       }
     });
 
+
+
     // refresh rooms on roomList click
     $('#roomSelect').click(function() {
-
+      // $('#roomSelect').children().remove();
       app.roomList.forEach(function(roomname) {
         app.renderRoom(roomname);
       });
+      app.renderRoom('Create new Room here...');
     });
+
+
 
     // clear messages with button click
     $('#clear').on('click', function() {
       app.clearMessages();
     });
+
+
 
     // send message event
     $('#send').unbind('submit').bind('submit').submit(function(event) {
@@ -59,11 +74,15 @@ var app = {
       $('#message').val('');
     });
 
+
+
     // fetch new messages every x seconds
     setInterval(function() {
       app.fetch('http://parse.sfm6.hackreactor.com/chatterbox/classes/messages');
     }, 1000);
   },
+
+
 
   send: function(message) { 
     $.ajax({
@@ -80,6 +99,8 @@ var app = {
       }
     });
   },
+
+
 
   fetch: function(url) {
     $.ajax({
@@ -109,9 +130,13 @@ var app = {
     });
   },
 
+
+
   clearMessages: function() {
     $('#chats').children().remove();
   },
+
+
 
   renderMessage: function (message) {
     var $message = $('<div></div>').addClass(message.roomname);
@@ -119,25 +144,31 @@ var app = {
     .addClass('username')
     .addClass(message.username)
     .text(app.secure(message.username));
+    // if new message is by user in friends list, add friend class
     if (app.friends.includes('.' + message.username)) {
       $username.addClass('friend');
     }
-
     var $text = $('<p></p>').text(app.secure(message.text));
     $message.prepend($username).append($text);
     $message.addClass('chat');
     $('#chats').append($message);
   },
 
+
+
   renderRoom: function(roomName) {
     var $room = $('<option></option>');
     $room.attr('value', roomName).text(roomName);
-    $('#roomSelect').prepend($room);
+    $('#roomSelect').append($room);
   },
+
+
 
   handleUsernameClick: function(username) {
     $(username).toggleClass('friend');
   },
+
+
 
   handleSubmit: function() {
     var text = $('#message').val();
@@ -147,32 +178,36 @@ var app = {
       'text': text,
       'roomname': app.currentRoom
     };
-
     app.renderMessage(message);
     app.send(message);
   },
   
+
+
   //Security Function
   secure: function(string) {
     if (!string) { return ''; }
-
     var forbidden = ['<', '>', '/', '{', '}', ';', '[', ']', '(', ')', '%', '$'];
     var secured = string.split('');
-
     for (var i = 0; i < secured.length; i++) {
       if (forbidden.indexOf(secured[i]) > -1) {
         secured[i] = ' ';
       }
     }
-
     return secured.join('');
   },
+
+
 
   // how we keep track of current room for message posting
   currentRoom: 'lobby',
 
+
+
   // list of rooms that updates as we GET data from server
   roomList: [],
+
+
 
   // stores our friends list to highlight friend names on message arrival
   friends: [],
